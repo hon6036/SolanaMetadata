@@ -1,0 +1,29 @@
+{
+  "name": "nftmetadata",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --exec babel-node src/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.18.2",
+    "@babel/node": "^7.17.10",
+    "@metaplex-foundation/mpl-token-metadata": "^2.1.2",
+    "@metaplex/js": "^4.12.0",
+    "@solana/spl-token": "^0.2.0",
+    "@solana/spl-token-registry": "^0.2.4216",
+    "@solana/web3.js": "^1.43.1",
+    "base-58": "0.0.1",
+    "core-js": "^3.22.7",
+    "express": "^4.18.1",
+    "nodemon": "^2.0.16"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17.10",
+    "@babel/preset-env": "^7.18.2"
+  }
+}
