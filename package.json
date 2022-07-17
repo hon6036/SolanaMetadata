@@ -17,6 +17,7 @@
     "@solana/spl-token": "^0.2.0",
     "@solana/spl-token-registry": "^0.2.4216",
     "@solana/web3.js": "^1.43.1",
+    "axios": "^0.27.2",
     "base-58": "0.0.1",
     "core-js": "^3.22.7",
     "express": "^4.18.1",
@@ -25,5 +26,10 @@
   "devDependencies": {
     "@babel/cli": "^7.17.10",
     "@babel/preset-env": "^7.18.2"
+  },
+  "babel": {
+    "presets": [
+      "@babel/env"
+    ]
   }
 }
