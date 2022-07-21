@@ -19,8 +19,12 @@ import {
     getAssociatedTokenAddress,
     createAssociatedTokenAccountInstruction
 } from "@solana/spl-token";
+import { 
+    getSignaturesForAddress,
+    getTransaction
+ } from './api.js'
 import { TokenListProvider } from "@solana/spl-token-registry";
-const axios = require('axios')
+const axios = require('axios');
 const { metadata: { Metadata } } = programs;
 
 const connection = new Connection("https://api.devnet.solana.com")
@@ -95,11 +99,11 @@ app.get("/getFTdata", async function (req, res) {
 app.get("/getBalance", async function (req, res) {
     console.log("getBalance")
     let pubkey = new PublicKey(req.query.publicKey)
-    let balance = await connection.getBalance(pubkey)
+    let balance = await connectionMain.getBalance(pubkey)
     console.log(balance)
     res.send({"Balance": balance})
 })
-
+755GmfZd8vPpDTgmNRkFD8kAtqNbjwm3FMT6dq9dND6
 app.get("/makeTransaction", async function (req, res) {
     console.log("makeTransaction")
     var fromPublicKeyString = req.query.fromPublicKey
@@ -189,6 +193,52 @@ app.get("/sendTransaction", async function (req, res) {
     else {
         res.send({transactionHash: response.data.result})
     }
+})
+
+app.get("/getTxInfo", async function (req, res) {
+    console.log("getTxInfo")
+    // let a = await getTransaction("3Xq6KsmVbAUifSqhrWki1Zw78jujfT71p9XBdwhUUf1gdZ1ibVCTu7vuDWVG42YRmnArmZScTSZgtLkJac9LXmjo")
+    // console.log(a.data.result.meta.postTokenBalances)
+    // console.log(a.data.result.meta.preTokenBalances)
+    let publicKey = new PublicKey(req.query.publicKey)
+    let txHash
+    let txHashList = []
+    let index = 0
+    let start = new Date()
+    while(true) {
+        const response = await getSignaturesForAddress(publicKey, txHash)
+        for(var i in response.data.result) {
+            let txDetail = await getTransaction(response.data.result[i].signature)
+            txHashList.push(txDetail.data.result.meta)
+            console.log(i)
+        }
+        if(response.data.result.length != 1000) {
+            break
+        } else {
+            txHash = response.data.result[999].signature
+        }
+        index++
+        if(index == 1) {
+            break
+        }
+    }
+    let end = new Date()
+    console.log(txHashList.length)
+    console.log(end - start)
+    res.send(txHashList)
+})
+
+app.get("/updateTxData", async function (req, res) {
+    console.log("getSignaturesForAddress")
+    let pubkey = new PublicKey(req.query.publicKey)
+    const response = await axios.post("https://api.devnet.solana.com", {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "getSignaturesForAddress",
+        "params": [pubkey.toBase58(), {"minContextSlot": 147363558}]
+    })
+    console.log(response.data)
+
 })
 
 var server = app.listen(3000, function () {
