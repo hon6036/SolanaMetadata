@@ -103,7 +103,7 @@ app.get("/getBalance", async function (req, res) {
     console.log(balance)
     res.send({"Balance": balance})
 })
-755GmfZd8vPpDTgmNRkFD8kAtqNbjwm3FMT6dq9dND6
+
 app.get("/makeTransaction", async function (req, res) {
     console.log("makeTransaction")
     var fromPublicKeyString = req.query.fromPublicKey
